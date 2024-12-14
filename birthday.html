@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Surprise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #FFE4E1; /* Soft pink background color */
+            margin: 0;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            display: none;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 70%;
+            max-width: 600px;
+            z-index: 2;
+        }
+
+        .question {
+            font-size: 24px;
+            font-weight: bold;
+            color: #D84B5B;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .button {
+            padding: 12px 24px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #D84B5B;
+            color: #fff;
+            margin: 10px;
+        }
+
+        .button:hover {
+            background-color: #F39C42;
+        }
+
+        .moving-button {
+            position: absolute;
+            padding: 12px 24px;
+            font-size: 18px;
+            background-color: #E74C3C;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.5s ease;
+        }
+
+        .celebration {
+            display: none;
+            font-size: 24px;
+            color: #ff6347;
+            margin-top: 20px;
+        }
+
+        .fireworks {
+            display: none;
+            font-size: 50px;
+            color: #FFD700;
+            margin-top: 30px;
+        }
+
+        .fireworks span {
+            animation: explode 1s infinite;
+        }
+
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .envelope {
+            width: 250px;
+            height: 150px;
+            background-color: #D84B5B;
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .envelope:hover {
+            transform: scale(1.1);
+        }
+
+        .envelope:after {
+            content: "Open it!";
+            font-size: 20px;
+        }
+
+        .envelope.opened {
+            display: none;
+        }
+
+        /* Background Image Style */
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.6;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Random Image Background -->
+    <div class="background-image" id="bgImage"></div>
+
+    <div class="envelope" id="envelope" onclick="openEnvelope()">
+        Open it!
+    </div>
+
+    <div class="container" id="container">
+        <div class="question">Will you be my partner in crime forever?</div>
+        <div class="message">
+            🌹 Happy Birthday to the One Who Steals My Heart Every Day! 🌹
+            <br><br>
+            Today’s your day, and I just can’t stop thinking about how lucky the world is to have someone as amazing as you in it. You’re smart, beautiful, and have this way of making everything around you better—especially my life.
+            <br><br>
+            I hope your day is full of everything you love, but if there’s something (or someone) missing, I’d love the chance to fix that. 😉 You deserve nothing less than someone who sees just how incredible you are—and honestly, I can’t help but hope that someone could be me.
+            <br><br>
+            So, here’s to you, the reason I’ve been smiling a little more and dreaming a little bigger. Maybe this year, I could give you more than just birthday wishes? 💌
+            <br><br>
+            With all my heart, <br> Neelesh
+        </div>
+        <div class="options">
+            <button class="button" id="iWill" onclick="celebrate()">I will</button>
+            <button class="button moving-button" id="cantSayRightNow" onmouseover="moveButton()" onclick="thinking()">Can’t say it right now</button>
+        </div>
+        <div class="celebration" id="celebrationMessage">You said yes! 🎉💖</div>
+        <div class="fireworks" id="fireworks">
+            🎆🎆🎆
+        </div>
+    </div>
+
+    <script>
+        // Array of random girl images from Unsplash
+        const images = [
+            'https://images.unsplash.com/photo-1542051162-d49d9c2d09e3',
+            'https://images.unsplash.com/photo-1604079941344-0c0c6ec4be9d',
+            'https://images.unsplash.com/photo-1506697872630-d1beebdd290b',
+            'https://images.unsplash.com/photo-1561948957-cc8a309ea981'
+        ];
+
+        // Function to set a random image as background
+        function setRandomBackground() {
+            const randomImage = images[Math.floor(Math.random() * images.length)];
+            document.getElementById('bgImage').style.backgroundImage = `url(${randomImage})`;
+        }
+
+        // Call the background image function on load
+        setRandomBackground();
+
+        function openEnvelope() {
+            document.getElementById('container').style.display = 'block';
+            document.getElementById('envelope').classList.add('opened');
+        }
+
+        function moveButton() {
+            let button = document.getElementById('cantSayRightNow');
+            let x = Math.random() * (window.innerWidth - button.offsetWidth);
+            let y = Math.random() * (window.innerHeight - button.offsetHeight);
+            button.style.left = `${x}px`;
+            button.style.top = `${y}px`;
+        }
+
+        function celebrate() {
+            document.getElementById('celebrationMessage').style.display = 'block';
+            document.getElementById('fireworks').style.display = 'block';
+        }
+
+        function thinking() {
+            alert("Take your time, I’ll be here waiting! 😉");
+        }
+    </script>
+</body>
+</html>
